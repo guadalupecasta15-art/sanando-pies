@@ -20,7 +20,7 @@ export async function signInWithPassword(
     };
   }
 
-  const supabase = createClient();
+ const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
@@ -31,7 +31,7 @@ export async function signInWithPassword(
 }
 
 export async function signOut() {
-  const supabase = createClient();
+  const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/login");
 }

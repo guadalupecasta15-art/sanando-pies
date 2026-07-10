@@ -37,7 +37,7 @@ export async function submitAppointmentRequest(
     };
   }
 
-  const supabase = createClient();
+ const supabase = await createClient();
   const { error } = await supabase.from("appointment_requests").insert({
     full_name: input.fullName,
     phone: input.phone,

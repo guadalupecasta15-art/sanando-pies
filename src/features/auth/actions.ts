@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -16,22 +16,22 @@ export async function signInWithPassword(
     return {
       success: false,
       message:
-        "Supabase aún no está configurado (Etapa 4). Agrega tus variables de entorno para activar el login.",
+        "Supabase aÃºn no estÃ¡ configurado (Etapa 4). Agrega tus variables de entorno para activar el login.",
     };
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    return { success: false, message: "Correo o contraseña incorrectos." };
+    return { success: false, message: "Correo o contraseÃ±a incorrectos." };
   }
 
   redirect("/dashboard");
 }
 
 export async function signOut() {
-  const supabase = createClient();
+  const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/login");
 }

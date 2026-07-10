@@ -1,14 +1,12 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { Database } from "@/types/database.types";
-
 /**
  * Cliente de Supabase para uso en Server Components, Server Actions y Route Handlers.
  * Lee/escribe cookies de sesión a través del store de cookies de Next.js.
  */
-export function createClient() {
-  const cookieStore = cookies();
-
+export async function createClient() {
+  const cookieStore = await cookies();
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { createClient } from "@/lib/supabase/server";
 
@@ -16,10 +16,10 @@ export interface ActionResult {
 }
 
 /**
- * Guarda una solicitud de cita pública en la tabla `appointment_requests` de Supabase.
+ * Guarda una solicitud de cita pÃºblica en la tabla `appointment_requests` de Supabase.
  * No crea ninguna cuenta de usuario: el paciente no tiene acceso al sistema.
- * Se activa por completo en la Etapa 4 (Integración con Supabase); mientras tanto
- * valida y responde de forma controlada si las variables de entorno no están configuradas.
+ * Se activa por completo en la Etapa 4 (IntegraciÃ³n con Supabase); mientras tanto
+ * valida y responde de forma controlada si las variables de entorno no estÃ¡n configuradas.
  */
 export async function submitAppointmentRequest(
   input: AppointmentRequestInput
@@ -29,7 +29,7 @@ export async function submitAppointmentRequest(
   }
 
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    // Etapa 1-3: Supabase aún no está conectado.
+    // Etapa 1-3: Supabase aÃºn no estÃ¡ conectado.
     console.log("[appointment_requests] (modo demo, sin Supabase):", input);
     return {
       success: true,
@@ -37,7 +37,7 @@ export async function submitAppointmentRequest(
     };
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.from("appointment_requests").insert({
     full_name: input.fullName,
     phone: input.phone,
@@ -51,7 +51,7 @@ export async function submitAppointmentRequest(
     console.error(error);
     return {
       success: false,
-      message: "No pudimos enviar tu solicitud. Intenta nuevamente o contáctanos por WhatsApp.",
+      message: "No pudimos enviar tu solicitud. Intenta nuevamente o contÃ¡ctanos por WhatsApp.",
     };
   }
 

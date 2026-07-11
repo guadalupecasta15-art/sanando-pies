@@ -202,3 +202,29 @@ export async function getFinanceSummary(): Promise<FinanceSummary> {
     averageTicket,
   };
 }
+
+export interface AppointmentRequestItem {
+  id: string;
+  fullName: string;
+  phone: string;
+  reason: string | null;
+  createdAt: string;
+}
+
+export async function getPendingAppointmentRequests(): Promise<AppointmentRequestItem[]> {
+  const supabase = await createClient();
+
+  const { data } = await supabase
+    .from("appointment_requests")
+    .select("id, full_name, phone, reason, created_at, handled")
+    .eq("handled", false)
+    .order("created_at", { ascending: false });
+
+  return (data ?? []).map((r) => ({
+    id: r.id,
+    fullName: r.full_name,
+    phone: r.phone,
+    reason: r.reason,
+    createdAt: r.created_at,
+  }));
+}

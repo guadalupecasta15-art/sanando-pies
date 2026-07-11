@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
-import { Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { AppointmentStatusBadge } from "@/components/admin/appointment-status-badge";
+import { NewAppointmentDialog } from "@/components/admin/new-appointment-dialog";
 import { getTodayAppointments } from "@/features/dashboard/queries";
+import { getAppointmentFormOptions } from "@/features/appointments/lookups";
 import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Agenda" };
 
 export default async function AgendaPage() {
-  const todayAppointments = await getTodayAppointments();
+  const [todayAppointments, formOptions] = await Promise.all([
+    getTodayAppointments(),
+    getAppointmentFormOptions(),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -18,13 +21,15 @@ export default async function AgendaPage() {
           <h1 className="font-display text-2xl font-semibold text-primary-900">Agenda</h1>
           <p className="text-sm capitalize text-primary-500">{formatDate(new Date())}</p>
         </div>
-        <Button>
-          <Plus className="h-4 w-4" />
-          Nueva cita
-        </Button>
+        <NewAppointmentDialog
+          patients={formOptions.patients}
+          specialists={formOptions.specialists}
+          services={formOptions.services}
+          rooms={formOptions.rooms}
+        />
       </div>
       <div className="inline-flex rounded-lg border border-border bg-white p-1">
-        {["Día", "Semana", "Mes"].map((v, i) => (
+        {["Dia", "Semana", "Mes"].map((v, i) => (
           <button
             key={v}
             className={`rounded-md px-4 py-2 text-sm font-medium ${

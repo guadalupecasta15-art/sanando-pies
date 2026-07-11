@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { Users, CalendarCheck2, Wallet, PackageX } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -6,17 +6,26 @@ import { StatCard } from "@/components/admin/stat-card";
 import { AppointmentStatusBadge } from "@/components/admin/appointment-status-badge";
 import { PatientsBarChart, RevenueLineChart, TreatmentsPieChart } from "@/components/admin/charts";
 import {
-  dashboardStats,
-  todayAppointments,
-  patientsByMonth,
-  revenueByMonth,
-  treatmentDistribution,
-} from "@/constants/mock-data";
+  getDashboardStats,
+  getTodayAppointments,
+  getPatientsByMonth,
+  getRevenueByMonth,
+  getTreatmentDistribution,
+} from "@/features/dashboard/queries";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const [dashboardStats, todayAppointments, patientsByMonth, revenueByMonth, treatmentDistribution] =
+    await Promise.all([
+      getDashboardStats(),
+      getTodayAppointments(),
+      getPatientsByMonth(),
+      getRevenueByMonth(),
+      getTreatmentDistribution(),
+    ]);
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -46,8 +55,8 @@ export default function DashboardPage() {
           icon={Wallet}
           label="Ingresos del mes"
           value={formatCurrency(dashboardStats.monthlyRevenue)}
-          helper={`+${dashboardStats.revenueChangePct}% vs. mes anterior`}
-          trend="up"
+          helper={`${dashboardStats.revenueChangePct >= 0 ? "+" : ""}${dashboardStats.revenueChangePct}% vs. mes anterior`}
+          trend={dashboardStats.revenueChangePct >= 0 ? "up" : "down"}
         />
         <StatCard
           icon={PackageX}
@@ -67,6 +76,9 @@ export default function DashboardPage() {
             </Link>
           </CardHeader>
           <CardContent className="space-y-3">
+            {todayAppointments.length === 0 && (
+              <p className="text-sm text-primary-400">No hay citas programadas para hoy.</p>
+            )}
             {todayAppointments.map((a) => (
               <div
                 key={a.id}

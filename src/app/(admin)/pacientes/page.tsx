@@ -3,12 +3,14 @@ import { Plus, FolderHeart } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { patients } from "@/constants/mock-data";
+import { getPatientsList } from "@/features/patients/queries";
 import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Pacientes" };
 
-export default function PacientesPage() {
+export default async function PacientesPage() {
+  const patients = await getPatientsList();
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -31,11 +33,18 @@ export default function PacientesPage() {
                 <th className="px-5 py-3.5 font-semibold">Contacto</th>
                 <th className="px-5 py-3.5 font-semibold">Última visita</th>
                 <th className="px-5 py-3.5 font-semibold">Visitas</th>
-                <th className="px-5 py-3.5 font-semibold">Condiciones activas</th>
+                <th className="px-5 py-3.5 font-semibold">Notas médicas</th>
                 <th className="px-5 py-3.5 font-semibold text-right">Expediente</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
+              {patients.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-5 py-8 text-center text-sm text-primary-400">
+                    No hay pacientes registrados todavía.
+                  </td>
+                </tr>
+              )}
               {patients.map((p) => (
                 <tr key={p.id} className="hover:bg-primary-50/50">
                   <td className="px-5 py-4 font-medium text-primary-900">{p.fullName}</td>
@@ -43,17 +52,15 @@ export default function PacientesPage() {
                     <p>{p.phone}</p>
                     <p className="text-xs">{p.email}</p>
                   </td>
-                  <td className="px-5 py-4 text-primary-500">{formatDate(p.lastVisit)}</td>
+                  <td className="px-5 py-4 text-primary-500">
+                    {p.lastVisit ? formatDate(p.lastVisit) : "—"}
+                  </td>
                   <td className="px-5 py-4 text-primary-500">{p.totalVisits}</td>
                   <td className="px-5 py-4">
-                    {p.activeConditions.length === 0 ? (
-                      <span className="text-xs text-primary-300">—</span>
+                    {p.medicalNote ? (
+                      <Badge variant="neutral">{p.medicalNote}</Badge>
                     ) : (
-                      <div className="flex flex-wrap gap-1.5">
-                        {p.activeConditions.map((c) => (
-                          <Badge key={c} variant="neutral">{c}</Badge>
-                        ))}
-                      </div>
+                      <span className="text-xs text-primary-300">—</span>
                     )}
                   </td>
                   <td className="px-5 py-4 text-right">

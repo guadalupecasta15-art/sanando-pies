@@ -3,12 +3,14 @@ import { Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AppointmentStatusBadge } from "@/components/admin/appointment-status-badge";
-import { todayAppointments } from "@/constants/mock-data";
+import { getTodayAppointments } from "@/features/dashboard/queries";
 import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Agenda" };
 
-export default function AgendaPage() {
+export default async function AgendaPage() {
+  const todayAppointments = await getTodayAppointments();
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -21,7 +23,6 @@ export default function AgendaPage() {
           Nueva cita
         </Button>
       </div>
-
       <div className="inline-flex rounded-lg border border-border bg-white p-1">
         {["Día", "Semana", "Mes"].map((v, i) => (
           <button
@@ -34,10 +35,14 @@ export default function AgendaPage() {
           </button>
         ))}
       </div>
-
       <Card>
         <CardContent className="p-0">
           <div className="divide-y divide-border">
+            {todayAppointments.length === 0 && (
+              <p className="px-5 py-8 text-center text-sm text-primary-400">
+                No hay citas programadas para hoy.
+              </p>
+            )}
             {todayAppointments.map((a) => (
               <div key={a.id} className="flex flex-wrap items-center gap-4 px-5 py-4">
                 <div className="w-20 shrink-0">

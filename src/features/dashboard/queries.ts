@@ -180,3 +180,25 @@ export async function getTreatmentDistribution(): Promise<TreatmentSlice[]> {
 
   return slices;
 }
+
+export interface FinanceSummary {
+  transactionsThisMonth: number;
+  averageTicket: number;
+}
+
+export async function getFinanceSummary(): Promise<FinanceSummary> {
+  const supabase = await createClient();
+  const now = new Date();
+  const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+
+  const { data } = await supabase.from("sales").select("total").gte("created_at", thisMonthStart);
+
+  const sales = data ?? [];
+  const total = sales.reduce((sum, s) => sum + Number(s.total), 0);
+  const averageTicket = sales.length > 0 ? Math.round(total / sales.length) : 0;
+
+  return {
+    transactionsThisMonth: sales.length,
+    averageTicket,
+  };
+}

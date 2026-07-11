@@ -24,7 +24,6 @@ export async function signInWithPassword(
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    console.error("SUPABASE_LOGIN_ERROR:", error.message, "| status:", error.status, "| code:", error.code);
     return { success: false, message: "Correo o contraseÃ±a incorrectos." };
   }
 
@@ -36,4 +35,5 @@ export async function signOut() {
   await supabase.auth.signOut();
   redirect("/login");
 }
+
 

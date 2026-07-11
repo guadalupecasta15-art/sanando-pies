@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Plus, FolderHeart } from "lucide-react";
+import { FolderHeart } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { NewPatientDialog } from "@/components/admin/new-patient-dialog";
 import { getPatientsList } from "@/features/patients/queries";
 import { formatDate } from "@/lib/utils";
 
@@ -18,10 +18,7 @@ export default async function PacientesPage() {
           <h1 className="font-display text-2xl font-semibold text-primary-900">Pacientes</h1>
           <p className="text-sm text-primary-500">{patients.length} pacientes registrados</p>
         </div>
-        <Button>
-          <Plus className="h-4 w-4" />
-          Nuevo paciente
-        </Button>
+        <NewPatientDialog />
       </div>
 
       <Card>
@@ -31,9 +28,9 @@ export default async function PacientesPage() {
               <tr>
                 <th className="px-5 py-3.5 font-semibold">Paciente</th>
                 <th className="px-5 py-3.5 font-semibold">Contacto</th>
-                <th className="px-5 py-3.5 font-semibold">Última visita</th>
+                <th className="px-5 py-3.5 font-semibold">Ultima visita</th>
                 <th className="px-5 py-3.5 font-semibold">Visitas</th>
-                <th className="px-5 py-3.5 font-semibold">Notas médicas</th>
+                <th className="px-5 py-3.5 font-semibold">Notas medicas</th>
                 <th className="px-5 py-3.5 font-semibold text-right">Expediente</th>
               </tr>
             </thead>
@@ -41,7 +38,7 @@ export default async function PacientesPage() {
               {patients.length === 0 && (
                 <tr>
                   <td colSpan={6} className="px-5 py-8 text-center text-sm text-primary-400">
-                    No hay pacientes registrados todavía.
+                    No hay pacientes registrados todavia.
                   </td>
                 </tr>
               )}
@@ -53,14 +50,14 @@ export default async function PacientesPage() {
                     <p className="text-xs">{p.email}</p>
                   </td>
                   <td className="px-5 py-4 text-primary-500">
-                    {p.lastVisit ? formatDate(p.lastVisit) : "—"}
+                    {p.lastVisit ? formatDate(p.lastVisit) : "-"}
                   </td>
                   <td className="px-5 py-4 text-primary-500">{p.totalVisits}</td>
                   <td className="px-5 py-4">
                     {p.medicalNote ? (
                       <Badge variant="neutral">{p.medicalNote}</Badge>
                     ) : (
-                      <span className="text-xs text-primary-300">—</span>
+                      <span className="text-xs text-primary-300">-</span>
                     )}
                   </td>
                   <td className="px-5 py-4 text-right">

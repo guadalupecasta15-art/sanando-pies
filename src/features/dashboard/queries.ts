@@ -2,6 +2,17 @@
 
 const MONTH_LABELS = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 const CHART_COLORS = ["#0B2A4A", "#1E5FA8", "#3E7CB8", "#A6C8EB", "#D2E4F5"];
+const MEXICO_TZ = "America/Mexico_City";
+
+function nowInMexico(): Date {
+  const mxString = new Date().toLocaleString("en-US", { timeZone: MEXICO_TZ });
+  return new Date(mxString);
+}
+
+function todayISODate(): string {
+  const now = new Date().toLocaleDateString("en-CA", { timeZone: MEXICO_TZ });
+  return now;
+}
 
 export interface DashboardStats {
   registeredPatients: number;
@@ -34,12 +45,8 @@ export interface TreatmentSlice {
   color: string;
 }
 
-function todayISODate() {
-  return new Date().toISOString().slice(0, 10);
-}
-
 function getLastNMonths(n: number) {
-  const now = new Date();
+  const now = nowInMexico();
   const months: { year: number; month: number; label: string }[] = [];
   for (let i = n - 1; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
@@ -50,7 +57,7 @@ function getLastNMonths(n: number) {
 
 export async function getDashboardStats(): Promise<DashboardStats> {
   const supabase = await createClient();
-  const now = new Date();
+  const now = nowInMexico();
   const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
   const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString();
   const today = todayISODate();
@@ -188,7 +195,7 @@ export interface FinanceSummary {
 
 export async function getFinanceSummary(): Promise<FinanceSummary> {
   const supabase = await createClient();
-  const now = new Date();
+  const now = nowInMexico();
   const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
   const { data } = await supabase.from("sales").select("total").gte("created_at", thisMonthStart);

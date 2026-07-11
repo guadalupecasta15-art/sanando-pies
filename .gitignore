@@ -9,3 +9,6 @@ out
 
 .vercel
 .env*
+
+temp_key.txt
+.env.vercel-check

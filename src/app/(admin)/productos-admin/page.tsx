@@ -1,21 +1,20 @@
 import type { Metadata } from "next";
-import { Plus, AlertTriangle } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { products } from "@/constants/mock-data";
+import { NewProductDialog } from "@/components/admin/new-product-dialog";
+import { getProductsList } from "@/features/products/queries";
 import { formatCurrency } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Productos" };
 
-export default function ProductosAdminPage() {
+export default async function ProductosAdminPage() {
+  const products = await getProductsList();
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-display text-2xl font-semibold text-primary-900">Productos</h1>
-        <Button>
-          <Plus className="h-4 w-4" />
-          Nuevo producto
-        </Button>
+        <NewProductDialog />
       </div>
 
       <Card>
@@ -30,6 +29,13 @@ export default function ProductosAdminPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
+              {products.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="px-5 py-8 text-center text-sm text-primary-400">
+                    No hay productos registrados todavia.
+                  </td>
+                </tr>
+              )}
               {products.map((p) => (
                 <tr key={p.id} className="hover:bg-primary-50/50">
                   <td className="px-5 py-4">

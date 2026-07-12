@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import { Plus, User } from "lucide-react";
+﻿import type { Metadata } from "next";
+import { User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { NewSpecialistDialog } from "@/components/admin/new-specialist-dialog";
 import { getSpecialistsList } from "@/features/specialists/queries";
 
 export const metadata: Metadata = { title: "Especialistas" };
@@ -13,13 +13,10 @@ export default async function EspecialistasAdminPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-display text-2xl font-semibold text-primary-900">Especialistas</h1>
-        <Button>
-          <Plus className="h-4 w-4" />
-          Nuevo especialista
-        </Button>
+        <NewSpecialistDialog />
       </div>
       {specialists.length === 0 && (
-        <p className="text-sm text-primary-400">No hay especialistas registrados todavía.</p>
+        <p className="text-sm text-primary-400">No hay especialistas registrados todavÃ­a.</p>
       )}
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {specialists.map((s) => (
@@ -35,7 +32,7 @@ export default async function EspecialistasAdminPage() {
               <div className="min-w-0">
                 <p className="truncate font-medium text-primary-900">{s.fullName}</p>
                 <p className="truncate text-xs text-primary-500">{s.specialty}</p>
-                <p className="text-xs text-primary-400">{s.experienceYears} años de experiencia</p>
+                <p className="text-xs text-primary-400">{s.experienceYears} aÃ±os de experiencia</p>
               </div>
             </CardContent>
           </Card>

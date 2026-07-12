@@ -1,7 +1,6 @@
-import type { Metadata } from "next";
-import { Plus } from "lucide-react";
+﻿import type { Metadata } from "next";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { NewServiceDialog } from "@/components/admin/new-service-dialog";
 import { getServicesList } from "@/features/services/queries";
 import { formatCurrency } from "@/lib/utils";
 
@@ -14,10 +13,7 @@ export default async function ServiciosAdminPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-display text-2xl font-semibold text-primary-900">Servicios</h1>
-        <Button>
-          <Plus className="h-4 w-4" />
-          Nuevo servicio
-        </Button>
+        <NewServiceDialog />
       </div>
       <Card>
         <CardContent className="overflow-x-auto p-0">
@@ -25,7 +21,7 @@ export default async function ServiciosAdminPage() {
             <thead className="bg-primary-50 text-xs uppercase tracking-wide text-primary-500">
               <tr>
                 <th className="px-5 py-3.5 font-semibold">Tratamiento</th>
-                <th className="px-5 py-3.5 font-semibold">Duración</th>
+                <th className="px-5 py-3.5 font-semibold">DuraciÃ³n</th>
                 <th className="px-5 py-3.5 font-semibold">Precio</th>
               </tr>
             </thead>
@@ -33,7 +29,7 @@ export default async function ServiciosAdminPage() {
               {treatments.length === 0 && (
                 <tr>
                   <td colSpan={3} className="px-5 py-8 text-center text-sm text-primary-400">
-                    No hay servicios registrados todavía.
+                    No hay servicios registrados todavÃ­a.
                   </td>
                 </tr>
               )}

@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { FolderHeart } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 import { NewPatientDialog } from "@/components/admin/new-patient-dialog";
 import { getPatientsList } from "@/features/patients/queries";
 import { formatDate } from "@/lib/utils";
@@ -61,10 +62,13 @@ export default async function PacientesPage() {
                     )}
                   </td>
                   <td className="px-5 py-4 text-right">
-                    <button className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent hover:underline">
+                    <Link
+                      href={`/pacientes/${p.id}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent hover:underline"
+                    >
                       <FolderHeart className="h-3.5 w-3.5" />
                       Ver expediente
-                    </button>
+                    </Link>
                   </td>
                 </tr>
               ))}

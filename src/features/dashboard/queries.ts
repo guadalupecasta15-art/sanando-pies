@@ -214,6 +214,7 @@ export interface AppointmentRequestItem {
   id: string;
   fullName: string;
   phone: string;
+  email: string;
   reason: string | null;
   createdAt: string;
 }
@@ -223,7 +224,7 @@ export async function getPendingAppointmentRequests(): Promise<AppointmentReques
 
   const { data } = await supabase
     .from("appointment_requests")
-    .select("id, full_name, phone, reason, created_at, handled")
+    .select("id, full_name, phone, email, reason, created_at, handled")
     .eq("handled", false)
     .order("created_at", { ascending: false });
 
@@ -231,6 +232,7 @@ export async function getPendingAppointmentRequests(): Promise<AppointmentReques
     id: r.id,
     fullName: r.full_name,
     phone: r.phone,
+    email: r.email,
     reason: r.reason,
     createdAt: r.created_at,
   }));
